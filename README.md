@@ -5,4 +5,4 @@
 * **Israel Bessa** 
 
 
-[Challenge link](https://github.com/FSPinho/hc-challenge/blob/master/README.md)
+[Challenge link](https://github.com/FSPinho/hc-challenge/blob/master/README.md){:target="_blank" rel="noopener"}
