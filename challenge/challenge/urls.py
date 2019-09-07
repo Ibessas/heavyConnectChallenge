@@ -16,9 +16,6 @@ Including another URLconf
 from django.contrib import admin
 from django.conf.urls import url
 from django.urls import path, include
-#from core.views import ReportViewSet
-#from core.views import ReportResponseViewSet
-#from core.views import UserViewSet
 from core import views
 from rest_framework import routers
 from rest_framework.urlpatterns import format_suffix_patterns
@@ -26,17 +23,10 @@ from rest_framework.urlpatterns import format_suffix_patterns
 
 router = routers.DefaultRouter()
 
-#router.register(r'reports', ReportViewSet)
-#router.register(r'response', ReportResponseViewSet)
-#router.register(r'user', UserViewSet)
-
 urlpatterns = [
-    url('admin/', admin.site.urls),
-    url('reports/', views.ReportList.as_view()),
-    url('response/', views.ResponseList.as_view()),
-    
-    #path('', include(router.urls)),
-    #path('api-auth/', include('rest_framework.urls'))
+    path('admin/', admin.site.urls),
+    path('report/', views.ReportView.as_view()),
+    path('response/', views.ResponseView.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
