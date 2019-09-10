@@ -1,3 +1,4 @@
 angular.module("reports").value("config", {
-	baseUrl: "http://localhost:8000/report/"
+	reportUrl: "http://localhost:8000/report/",
+	userUrl: "http://localhost:8000/user/"
 });

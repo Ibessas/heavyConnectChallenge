@@ -27,6 +27,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('report/', views.ReportView.as_view()),
     path('response/', views.ResponseView.as_view()),
+    path('user/', views.UserView.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

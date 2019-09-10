@@ -3,64 +3,72 @@ from rest_framework.views import APIView
 from rest_framework import status
 from .models import ReportResponse
 from .models import Report
+from .models import User
 from .serializer import ReportResponseSerializer
 from .serializer import ReportSerializer
 from django.http import JsonResponse
+from django.core import serializers
+
 
 class ReportView(APIView):
     def get(self,request):
-        reports = Report.objects.all()
+    
+        newvariable684 = int(request.GET.get('id',None),10) if request.GET.get('id',None) != None else None
+        userId = newvariable684
+        offset = int(request.GET.get('offset',None),10) if request.GET.get('offset',None) != None else 0
+        limit = int(request.GET.get('limit',None),10) if request.GET.get('limit',None) else None
 
-        userId = int(request.GET.get('id',None),10) if request.GET.get('id',None) != None else -1
-        offset = int(request.GET.get('offset',None),10)+1 if request.GET.get('offset',None) != None else -1
-        limit = int(request.GET.get('limit',None),10) if request.GET.get('limit',None) else reports.count()
+        reports = Report.objects.all() if userId == None else Report.objects.all().filter(author_id=userId) | Report.objects.filter(supervisor__id=userId) | Report.objects.filter(reportresponse__author__id=userId)
 
+        reports = reports[offset: limit+offset if limit != None else None]
+
+        reportList = self.jsonReports(reports, userId)
+    
+        reportList = list(reportList)
+        return JsonResponse(reportList,content_type="application/json", safe=False)
+
+    def jsonReports(self, reports, userId):
         reportList = []
         for report in reports:
-            add = False
-
-            if report.author.id == userId: add = True
             report_dict = {}
             report_dict['id'] = report.id
+            report_dict['author_id'] = report.author.id
             report_dict['first_name'] = report.author.first_name
             report_dict['last_name'] = report.author.last_name
             report_dict['email'] = report.author.email
-            
-            supervisores = [] 
-            for supervisor in report.supervisor.all():
-                if supervisor.id == userId: add = True
-                supervisor_dict = {}
-                supervisor_dict['first_name'] = supervisor.first_name
-                supervisor_dict['last_name'] = supervisor.last_name
-                supervisor_dict['email'] = supervisor.email
-                supervisores.append(supervisor_dict)
-            report_dict['supervisor'] = supervisores
+            report_dict['message'] = report.message
 
-            responses = ReportResponse.objects.all()
-            responseList = []
-            for response in responses:
-                if response.report == report:
-                    if response.author.id == userId: add = True
-                    response_dict = {}
-                    response_dict['message'] = response.message
-                    response_dict['author_first_name'] = response.author.first_name
-                    response_dict['author_last_name'] = response.author.last_name
-                    response_dict['email'] = response.author.email
-                    responseList.append(response_dict)
-            report_dict['responses'] = responseList
-            
-            if offset > 0:     
-                offset = offset - 1
-            else:
-                if limit > 0:
-                    if add or userId == -1:
-                        reportList.append(report_dict)
-                    limit = limit -1
-                else: break
-            
+            report_dict['supervisor'] = self.jsonSupervisors(report.supervisor.all())
 
-        reportList = list(reportList)
-        return JsonResponse(reportList,content_type="application/json", safe=False)
+            responses = ReportResponse.objects.filter(report = report) if userId == None else ReportResponse.objects.filter(author_id = userId) & ReportResponse.objects.filter(report = report)
+
+            report_dict['responses'] = self.jsonResponses(responses)
+
+            reportList.append(report_dict)
+        return reportList
+
+    def jsonSupervisors(self, supervisorList):
+        supervisors = [] 
+        for supervisor in supervisorList:
+            supervisor_dict = {}
+            supervisor_dict['id'] = supervisor.id
+            supervisor_dict['first_name'] = supervisor.first_name
+            supervisor_dict['last_name'] = supervisor.last_name
+            supervisor_dict['email'] = supervisor.email
+            supervisors.append(supervisor_dict)
+        return supervisors
+
+    def jsonResponses(self, responses):
+        responseList = []
+        for response in responses:
+                response_dict = {}
+                response_dict['id'] = response.id
+                response_dict['message'] = response.message
+                response_dict['author_first_name'] = response.author.first_name
+                response_dict['author_last_name'] = response.author.last_name
+                response_dict['email'] = response.author.email
+                responseList.append(response_dict)
+        return responseList
 
         
          
@@ -106,4 +114,17 @@ class ResponseView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class UserView(APIView):
+    def get(self, request):
+        users = User.objects.all()
+        userList = []
+        for user in users:
+            user_dict = {}
+            user_dict['id'] = user.id
+            user_dict['first_name'] = user.first_name
+            user_dict['last_name'] = user.last_name
+            user_dict['email'] = user.email
 
+            userList.append(user_dict)
+        userList = list(userList)
+        return JsonResponse(userList,content_type="application/json", safe=False)

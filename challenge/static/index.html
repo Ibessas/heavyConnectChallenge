@@ -15,12 +15,13 @@
     <script src="./js/controllers/reportController.js"></script>
     <style>
         .table{
-            width: 50em;
             text-align: center;
             border-radius: 5px;
+            flex: .5;
+			margin-bottom: 0px;
         }
         .jumbotron{
-            width: 800px;
+            width: 80vw;
             height: 100px;
 			text-align: center;
 			margin-top: 20px;
@@ -28,21 +29,85 @@
 			margin-right: auto;
             padding-top: 20px;
         }
-        .card{
-            margin-left: 10px
-        }
         .container{
             margin-left: auto;
             margin-right: auto;
+        }
+        .my-custom-scrollbar {
+            height: 35vw;
+            overflow: auto;
+        }
+        .table-wrapper-scroll-y {
+            display: block;
+        }
+        .reportScroll{
+            height: 15vw;
+            overflow: auto;
+            display: block;
+        }
+        .reportCard{
+            display: block;
+        }
+        .select{
+            cursor: pointer
+        }
+        .users{
+            height: 15vw;
+            overflow: auto;
+            display: block;
+        }
+        .row{
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .btn-secondary{
+            margin-top: 10px;
+            margin-left: 10px;
         }
     </style>
 </head>
 <body ng-controller="reportController">
     <div class="jumbotron text-center">
         <h1>Reports page</h1>
-    </div>
+    </div>        
     <div class="container row">
-        <table class="table table-hover table-dark  col">
+        <div class="col">
+
+            <div class="card reportScroll">
+                <h2>Report Info</h2>
+                <p> <strong> Report Id: </strong> {{selected.id}}</p>
+                <p> <strong> Author: </strong> {{selected.first_name + " " +selected.last_name}}</p>
+                <p> <strong> Report Supervisor: </strong> <span ng-repeat="supervisor in selected.supervisor"> {{supervisor.first_name + " " +supervisor.last_name}}; </span></p>
+                <div> 
+                    <h5> Responses:</h5>
+                    <div ng-repeat="response in selected.responses">
+                        <p> <strong> Messages: </strong> "{{response.message}}"; </p>
+                        <p> <strong> Author: </strong> {{response.author_first_name + " " + response.author_last_name}} </p>
+                    </div>
+                </div>       
+            </div>
+            <div class="row">
+                <div class="card users">
+                    <h3>Users</h3>
+                    <table class="table-striped">
+                        <tr ng-repeat="user in users">
+                            <td>
+                                <input type="radio" name="userSelect" ng-model="check" ng-click="setUser(user.id);reload()"> 
+                                    {{user.first_name + " " + user.last_name}}
+                                </input>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div>
+                    Offset: <input min="0" ng-change="check();reload()" ng-model="offset" type="number" class="form-control" name="fname" placeholder="Offset">                        
+                    Limit: <input min="0" ng-change="check();reload()" ng-model="limit" type="number" class="form-control" name="fname" placeholder="Limit">
+                    <button class="btn-secondary" ng-click="clear()">Clear</button>
+                </div>
+            </div>
+        </div>
+        <table class="table table-hover table-dark col table-wrapper-scroll-y my-custom-scrollbar">
             <thead>
                 <tr>
                     <th >Report Id</th>
@@ -51,30 +116,19 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="report in reports" ng-click="open(report)"> 
-                    <td>{{report.id}}</td>
+                
+                <tr ng-repeat="report in reports" ng-click="open(report)" class="select"> 
+                    <td> {{report.id}} </td>
                     <td>{{report.first_name + " " + report.last_name}}</td>
                     <td>
                         <p ng-repeat="supervisor in report.supervisor">
                             {{supervisor.first_name + " " + supervisor.last_name}}
                         </p>
+                        
                     </td>        
                 </tr>
             </tbody>
         </table>
-        <div class="col card">
-            <h3>Report Info</h3>
-            <p>Report Id: {{selected.id}}</p>
-            <p>Report Author: {{selected.first_name + " " +selected.last_name}}</p>
-            <p>Report Supervisor: <span ng-repeat="supervisor in selected.supervisor"> {{supervisor.first_name + " " +supervisor.last_name}}; </span></p>
-            <div> 
-                <h5>Responses</h5>
-                <div ng-repeat="response in selected.responses" class="card">
-                    <p> Messages: "{{response.message}}"; </p>
-                    <p> Author: {{response.author_first_name + " " + response.author_last_name}} </p>
-                </div>
-            </div>
-        </div>
     </div>
 </body>
 </html>
