@@ -32,6 +32,10 @@ angular.module("reports").controller("reportController",function($scope, userSer
     };
     
     $scope.$watch('user', function() {
+        if ($scope.user == null){
+            $scope.userId = null
+            $scope.reload()
+        }
         $scope.userId = $scope.user.id
         $scope.reload()
     });

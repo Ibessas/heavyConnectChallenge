@@ -32,7 +32,7 @@
                         <p> <strong> Supervisor: </strong> <span ng-repeat="supervisor in selected.supervisor"> {{supervisor.first_name + " " +supervisor.last_name}}; </span></p>
                     </div>
                     <div class="col"> 
-                        <h5>Message:</h5>
+                        <h5> <strong> Message: </strong> </h5>
                         {{selected.message}} 
                     </div>
                 </div>
@@ -41,8 +41,11 @@
                     <div class="row" >
                         <div class="col">
                             <div ng-repeat="response in selected.responses">
-                                <p> <strong> Messages: </strong> "{{response.message}}" </p>
-                                <p> <strong> Author: </strong> {{response.author_first_name + " " + response.author_last_name}} </p>
+                                    <p class="message">Message</p>
+                                    <p>                                    
+                                        <span><strong> </strong> {{response.message}} </span> 
+                                        <span style="font-size: .7em;"> - {{response.author_first_name + " " + response.author_last_name}}</span> 
+                                    </p>
                             </div>
                         </div>
                     </div>
@@ -64,20 +67,25 @@
         </div>
         <div class=" table-wrapper-scroll-y col">
             <table class="table table-hover table-dark  my-custom-scrollbar" style="display: grid">
-                <thead>
-                    <tr class="row">
-                        <th class="col">Report Id</th>
+                <div>
+                    <tr class="row thead">
+                        <th class="col">#</th>
+                        <th class="col">Message</th>
                         <th class="col">Author</th>
                     </tr>
-                </thead>
-                <tbody>
+                </div>
+                <div>
                     <tr ng-repeat="report in reports" ng-click="open(report)" class="select row"> 
                         <td class="col selected"  ng-if="report.id == selected.id"> {{report.id}} </td>
+                        <td class="col selected"  ng-if="report.id == selected.id"> "{{report.message}}" </td>
                         <td class="col selected"  ng-if="report.id == selected.id">{{report.first_name + " " + report.last_name}}</td>  
+
                         <td class="col "  ng-if="report.id != selected.id"> {{report.id}} </td>
+                        <td class="col "  ng-if="report.id != selected.id"> "{{report.message}}" </td>
                         <td class="col "  ng-if="report.id != selected.id">{{report.first_name + " " + report.last_name}}</td>  
+                        
                     </tr>
-                </tbody>
+                </div>
             </table>
         </div> 
         <div ng-init="reload()"></div>

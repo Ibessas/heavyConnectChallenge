@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib import admin
 
 class Report(models.Model):
     message = models.CharField(max_length=50)
@@ -9,6 +10,8 @@ class Report(models.Model):
     )
     supervisor = models.ManyToManyField(
         User)
+
+admin.site.register(Report)
 
 class ReportResponse(models.Model):
     message = models.CharField(max_length=50)
@@ -20,3 +23,4 @@ class ReportResponse(models.Model):
         User,
         on_delete = models.CASCADE
     )
+admin.site.register(ReportResponse)

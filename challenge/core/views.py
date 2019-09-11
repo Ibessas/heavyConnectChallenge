@@ -17,8 +17,9 @@ class ReportView(APIView):
         offset = int(request.GET.get('offset',None),10) if request.GET.get('offset',None) != None else 0
         limit = int(request.GET.get('limit',None),10) if request.GET.get('limit',None) else None
 
-        reports = Report.objects.all() if userId == None else Report.objects.all().filter(author_id=userId) | Report.objects.filter(supervisor__id=userId) | Report.objects.filter(reportresponse__author__id=userId)
+        reports = Report.objects.all().distinct() if userId == None else (Report.objects.all().filter(author_id=userId) | Report.objects.filter(supervisor__id=userId) | Report.objects.filter(reportresponse__author__id=userId))
 
+        reports = reports.distinct().order_by('id')
         reports = reports[offset: limit+offset if limit != None else None]
 
         reportList = self.jsonReports(reports, userId)
@@ -124,3 +125,10 @@ class UserView(APIView):
             userList.append(user_dict)
         userList = list(userList)
         return JsonResponse(userList,content_type="application/json", safe=False)
+
+    def post(self, request, format=None):
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
