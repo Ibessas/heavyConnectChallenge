@@ -2,6 +2,7 @@
  Heavy Connect Challenge System
 
 Para iniciar o backend, entre na pasta [./challenge](https://github.com/Ibessas/heavyConnectChallenge/tree/master/challenge) e faça:
+
   No windows: python.exe ./manage.py runserve
   No linux: python manage.py runserver
 
