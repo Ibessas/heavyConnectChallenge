@@ -1,15 +1,16 @@
-angular.module("reports").factory("reportsAPI", function($http, config){
+angular.module("reports").factory("reportsService", function($http, config){
     var _getReports = function (id, offset,limit) {
+        var temp = config.reportUrl 
         if(id != null|| offset != null || limit != null){
-            config.baseUrl += "?"
+            temp += "?"
             if(id!= null)
-                config.baseUrl+="id=" + id +"&"
+            temp+="id=" + id +"&"
             if(offset!=null)
-                config.baseUrl+="offset=" + offset + "&"
+            temp+="offset=" + offset + "&"
             if(limit!=null)
-                config.baseUrl+="limit=" + limit
+            temp+="limit=" + limit
         }
-        return $http.get(config.baseUrl);
+        return $http.get(temp)
     }
 
     return{

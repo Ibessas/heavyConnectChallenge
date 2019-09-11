@@ -13,8 +13,7 @@ from django.core import serializers
 class ReportView(APIView):
     def get(self,request):
     
-        newvariable684 = int(request.GET.get('id',None),10) if request.GET.get('id',None) != None else None
-        userId = newvariable684
+        userId = int(request.GET.get('id',None),10) if request.GET.get('id',None) != None else None
         offset = int(request.GET.get('offset',None),10) if request.GET.get('offset',None) != None else 0
         limit = int(request.GET.get('limit',None),10) if request.GET.get('limit',None) else None
 
@@ -68,10 +67,7 @@ class ReportView(APIView):
                 response_dict['author_last_name'] = response.author.last_name
                 response_dict['email'] = response.author.email
                 responseList.append(response_dict)
-        return responseList
-
-        
-         
+        return responseList      
 
     def post(self, request, format=None):
         serializer = ReportSerializer(data=request.data)

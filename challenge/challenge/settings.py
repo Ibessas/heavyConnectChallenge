@@ -26,9 +26,6 @@ SECRET_KEY = 'dy%s9_+j3#8@#l&rm=c&ufy%qlwqr%%ex_=@72hd9a*^bguj03'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -59,7 +56,7 @@ ROOT_URLCONF = 'challenge.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -140,13 +137,5 @@ STATICFILES_FINDERS = (
     #'django.contrib.staticfiles.finders.DefaultStorageFinder',
     #'compressor.finders.CompressorFinder',
 )
- 
-TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR, 'templates'),
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-)
-
 
 CORS_ORIGIN_ALLOW_ALL = True

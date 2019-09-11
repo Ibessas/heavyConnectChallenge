@@ -1,0 +1,59 @@
+.background-img{
+    background-image: url('./img/background.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.table{
+    text-align: center;
+    border-radius: 5px;
+    flex: .5;
+    margin-bottom: 0px;
+}
+.card{
+    padding-left: 10px;
+}
+.jumbotron{
+    background-color: #343a40;
+    color: white;
+    width: 80vw;
+    height: 50px;
+    margin-bottom: 20px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 10px;
+}
+.container{
+    margin-left: auto;
+    margin-right: auto;
+}
+.my-custom-scrollbar {
+    height: 40vw;
+    overflow: auto;
+}
+.table-wrapper-scroll-y {
+    display: block;
+}
+.reportScroll{
+    height: 21vw;
+    overflow: auto;
+    display: block;
+}
+.reportCard{
+    display: block;
+}
+.select{
+    cursor: pointer
+}
+.selected{
+    color:black;
+    background-color: white;
+}
+.row{
+    margin-left: auto;
+    margin-right: auto;
+}
+.btn-secondary{
+    margin-top: 10px;
+    margin-left: 10px;
+}

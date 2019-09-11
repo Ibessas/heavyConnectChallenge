@@ -1,2 +1,2 @@
-angular.module("reports",['ngRoute']);
+angular.module("reports",[]);
 
